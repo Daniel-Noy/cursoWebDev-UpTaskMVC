@@ -1,0 +1,21 @@
+{
+  "name": "app-salon-php-mvc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "public/index.php",
+  "scripts": {
+    "dev": "gulp",
+    "composer": "composer install"
+  },
+  "author": "Daniel Noyola",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser-js": "^5.2.2",
+    "gulp-webp": "^4.0.1",
+    "sass": "^1.41.1",
+    "terser": "^5.3.8"
+  }
+}
