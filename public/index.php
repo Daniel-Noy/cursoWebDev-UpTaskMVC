@@ -16,7 +16,7 @@ $router->get("/cuenta/logout", [LoginController::class, "logout"]);
 $router->get("/cuenta/crear", [LoginController::class, "crear"]);
 $router->post("/cuenta/crear", [LoginController::class, "crear"]);
 
-$router->get("/cuenta/mensaje", [LoginController::class, "crear"]);
+$router->get("/cuenta/mensaje", [LoginController::class, "mensaje"]);
 
 $router->get("/cuenta/confirmar", [LoginController::class, "confirmar"]);
 
