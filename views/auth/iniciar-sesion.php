@@ -1,8 +1,9 @@
 <div class="contenedor login">
     <?php include_once __DIR__ . "/../templates/nombre-sitio.php";?>
-
+    
     <div class="contenedor-sm">
-        <p class="descripcion-pagina">Crea tu cuenta en UpTask</p>
+        <p class="descripcion-pagina">Inicia sesion en UpTask</p>
+        <?php include_once __DIR__ . "/../templates/alertas.php";?>
 
         <form class="formulario" method="POST">
             <div class="campo">
@@ -12,6 +13,7 @@
                 name="email"
                 id="email"
                 placeholder="Tu Email"
+                value="<?php echo $correo; ?>"
                 >
             </div> <!-- Campo -->
             

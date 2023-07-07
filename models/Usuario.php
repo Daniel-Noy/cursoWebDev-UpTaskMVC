@@ -24,12 +24,19 @@ class Usuario extends ActiveRecord {
         $this->confirmado = $args["confirmado"] ?? 0;
     }
 
-    public function validarCuentaNueva()
-    {
-        if( !$this->nombre ) $this->setAlerta("error", "El nombre es obligatorio");
-        if( !$this->email ) $this->setAlerta("error", "El email es obligatorio");
-
+    public function validarLogin() {
+        $this->validarEmail();
         $this->validarContraseña();
+
+        return self::getAlertas();
+    }
+
+    public function validarCuentaNueva() {
+        if( !$this->nombre ) self::setAlerta("error", "El nombre es obligatorio");
+        $this->validarEmail();
+        $this->validarContraseña();
+        if( $this->password !== $this->passwordCheck ) self::setAlerta("error", "Las contraseñas no coinciden");
+
 
         return self::getAlertas();
     }
@@ -50,10 +57,22 @@ class Usuario extends ActiveRecord {
             self::setAlerta("error", "La contraseña debe contener al menos 6 caracteres");
 
         } 
-
-        if( $this->password !== $this->passwordCheck ) self::setAlerta("error", "Las contraseñas no coinciden");
-
         return self::getAlertas();
+    }
+
+    public function comprobarLogin( string $password) {
+        $pass = password_verify($password, $this->password);
+
+        if( !$pass ) {
+            self::$alertas["error"][] = "Contraseña incorrecta";
+            
+        } else {
+            if( !$this->confirmado ) {
+                self::$alertas["error"][] = "Aún no se ha confirmado tu cuenta";
+
+            } else return true;
+        }
+
     }
 
     function hashPassword() {

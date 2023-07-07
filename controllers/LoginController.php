@@ -7,20 +7,43 @@ use MVC\Router;
 
 class LoginController {
     public static function login(Router $router) {
-
-
         if($_SERVER["REQUEST_METHOD"] === "POST") {
+            $auth = new Usuario($_POST);
+            $alertas = $auth->validarLogin();
 
+            if( empty($alertas) ) {
+                $usuario = Usuario::where("email", $auth->email);
+
+                if( !$usuario ){
+                    Usuario::setAlerta("error", "El usuario no existe");
+                } else {
+                    $pass = $usuario->comprobarLogin($auth->password);
+
+                    if( $pass ){
+                        $_SESSION["id"] = $usuario->id;
+                        $_SESSION["nombre"] = $usuario->nombre;
+                        $_SESSION["email"] = $usuario->email;
+                        $_SESSION["login"] = true;
+
+                        header("Location: /proyectos");
+                    }
+                }
+            }
         }
 
         $router->render("auth/iniciar-sesion", [
-            "titulo" => "Iniciar Sesion"
+            "titulo" => "Iniciar Sesion",
+            "alertas" => Usuario::getAlertas(),
+            "correo" => $auth->email ?? ''
         ]);
     }
 
-    public static function logout(Router $router) {
 
+    public static function logout(Router $router) {
+        $_SESSION = [];
+        header("Location: /");
     }
+
 
     public static function crear(Router $router) {
         $usuario = new Usuario;
@@ -46,15 +69,10 @@ class LoginController {
                         $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
                         $mail->enviarConfirmación();
 
-                        $router->render("auth/mensaje", [
-                            "titulo" => "Cuenta creada",
-                            "mensaje" => "La cuenta ha sido creada correctamente"
-                        ]);
+                        header("Location: /cuenta/mensaje?tipo=creada");
                     }
                 }
             }
-
-
         }
 
         $router->render("auth/crear-cuenta", [
@@ -64,13 +82,24 @@ class LoginController {
         ]);
     }
 
-    // public static function cuentaCreada(Router $router) {
-    //     $router->render("/auth/mensaje", [
-    //         "titulo" => "Cuenta Creada",
-    //         "mensaje" => "Tu cuenta fue creada correctamente"
-    //     ]);
-    // }
-    
+
+    public static function mensaje(Router $router) {
+        $mensajes = [
+            "creada" => "Cuenta creada correctamente",
+            "correo" => "Correo enviado",
+            "pass" => "Contraseña reestablecida correctamente"
+        ];
+
+        $mensaje = $mensajes[$_GET["tipo"]] ?? '';
+
+
+        $router->render("/auth/mensaje", [
+            "titulo" => "OK",
+            "mensaje" => $mensaje
+        ]);
+    }
+
+
     public static function confirmar(Router $router) {
         $token = s($_GET["token"]);
 
@@ -114,14 +143,11 @@ class LoginController {
                     
                 } else {
                     $usuario->crearToken();
-                    $usuario->guardar();
+                    $res = $usuario->guardar();
                     $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
                     $mail->enviarRecuperacionPass();
 
-                    $router->render("auth/mensaje", [
-                        "titulo" => "Correo enviado",
-                        "mensaje" => "Hemos enviado un correo con las instrucciones para reestablecer tu contraseña"
-                    ]);
+                    if( $res ) header("Location: /cuenta/mensaje?tipo=correo");
                 }
             }
         }
@@ -131,6 +157,7 @@ class LoginController {
             "alertas" => Usuario::getAlertas()
         ]);
     }
+
 
     // Contraseñas
     public static function reestablecer(Router $router) {
@@ -150,12 +177,7 @@ class LoginController {
                 $usuario->token = '';
                 $res = $usuario->guardar();
 
-                if($res){
-                    $router->render("auth/mensaje", [
-                        "titulo" => "Reestablecer contraseña",
-                        "mensaje" => "Has reestablecido tu contraseña correctamente"
-                    ]);
-                }
+                if( $res ) header("Location: /cuenta/mensaje?tipo=pass");
             }
         }
 
