@@ -55,7 +55,7 @@
 
         <div class="acciones">
             <a href="/">¿Ya tienes cuenta? Iniciar Sesión</a>
-            <a href="/cuenta/contraseña/olvide">¿Olvidaste tu Contraseña?</a>
+            <a href="/cuenta/password/olvide">¿Olvidaste tu Contraseña?</a>
         </div>
     </div>
 </div>

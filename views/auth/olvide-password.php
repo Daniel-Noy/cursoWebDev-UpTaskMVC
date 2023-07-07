@@ -3,6 +3,7 @@
 
     <div class="contenedor-sm">
         <p class="descripcion-pagina">Recupera tu Contraseña ingresando el Correo registrado</p>
+        <?php include_once __DIR__ . "/../templates/alertas.php" ?>
 
         <form class="formulario" method="POST">
 

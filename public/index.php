@@ -21,11 +21,11 @@ $router->get("/cuenta/mensaje", [LoginController::class, "mensaje"]);
 $router->get("/cuenta/confirmar", [LoginController::class, "confirmar"]);
 
 // Contraseña
-$router->get("/cuenta/contraseña/olvide", [LoginController::class, "olvide"]);
-$router->post("/cuenta/contraseña/olvide", [LoginController::class, "olvide"]);
+$router->get("/cuenta/password/olvide", [LoginController::class, "olvide"]);
+$router->post("/cuenta/password/olvide", [LoginController::class, "olvide"]);
 
-$router->get("/cuenta/contraseña/reestablecer", [LoginController::class, "reestablecer"]);
-$router->post("/cuenta/contraseña/reestablecer", [LoginController::class, "reestablecer"]);
+$router->get("/cuenta/password/reestablecer", [LoginController::class, "reestablecer"]);
+$router->post("/cuenta/password/reestablecer", [LoginController::class, "reestablecer"]);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

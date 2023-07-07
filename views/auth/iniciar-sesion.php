@@ -30,7 +30,7 @@
 
         <div class="acciones">
             <a href="/cuenta/crear">¿Aún no tienes cuenta? Crea una</a>
-            <a href="/cuenta/contraseña/olvide">¿Olvidaste tu Contraseña?</a>
+            <a href="/cuenta/password/olvide">¿Olvidaste tu Contraseña?</a>
         </div>
     </div>
 </div>
