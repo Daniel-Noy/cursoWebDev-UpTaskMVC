@@ -29,11 +29,9 @@ class Usuario extends ActiveRecord {
         if( !$this->nombre ) $this->setAlerta("error", "El nombre es obligatorio");
         if( !$this->email ) $this->setAlerta("error", "El email es obligatorio");
 
-        if( !$this->password ) $this->setAlerta("error", "Debes ingresar una contraseña");
-        if( strlen($this->password) < 6 ) $this->setAlerta("error", "La contraseña debe contener al menos 6 caracteres");
-        if( $this->password !== $this->passwordCheck ) $this->setAlerta("error", "Las contraseñas no coinciden");
+        $this->validarContraseña();
 
-        return $this->getAlertas();
+        return self::getAlertas();
     }
 
     public function validarEmail() {
@@ -42,6 +40,20 @@ class Usuario extends ActiveRecord {
         }
 
         return self::$alertas;
+    }
+
+    public function validarContraseña() {
+        if( !$this->password ){
+            self::setAlerta("error", "Debes ingresar una contraseña");
+
+        } else if( strlen($this->password) < 6 ) {
+            self::setAlerta("error", "La contraseña debe contener al menos 6 caracteres");
+
+        } 
+
+        if( $this->password !== $this->passwordCheck ) self::setAlerta("error", "Las contraseñas no coinciden");
+
+        return self::getAlertas();
     }
 
     function hashPassword() {

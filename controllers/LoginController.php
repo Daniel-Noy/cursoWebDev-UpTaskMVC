@@ -134,15 +134,35 @@ class LoginController {
 
     // Contraseñas
     public static function reestablecer(Router $router) {
+        $token = s($_GET["token"]);
+        
+        if (!$token) header("Location: /");
 
+        $usuario = Usuario::where("token", $token);
+        if( !$usuario ) { Usuario::setAlerta("error", "Token invalido"); } 
 
-        if($_SERVER["REQUEST_METHOD"] === "POST") {
+        if( $_SERVER["REQUEST_METHOD"] === "POST" ) {
+            $usuario->sincronizar($_POST);
+            $alertas = $usuario->validarContraseña();
 
+            if( empty($alertas) ) {
+                $usuario->hashPassword();
+                $usuario->token = '';
+                $res = $usuario->guardar();
+
+                if($res){
+                    $router->render("auth/mensaje", [
+                        "titulo" => "Reestablecer contraseña",
+                        "mensaje" => "Has reestablecido tu contraseña correctamente"
+                    ]);
+                }
+            }
         }
 
         $router->render("auth/reestablecer", [
             "titulo" => "Reestablecer contraseña",
-            "alertas" => Usuario::getAlertas()
+            "alertas" => Usuario::getAlertas(),
+            "usuario" => $usuario
         ]);
     }
 }
