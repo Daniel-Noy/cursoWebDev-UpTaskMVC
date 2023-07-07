@@ -5,6 +5,8 @@
     <div class="contenedor-sm">
         <p class="descripcion-pagina">Iniciar Sesión</p>
 
+        <?php include_once __DIR__ . "/../templates/alertas.php" ?>
+
         <form class="formulario" method="POST">
             <div class="campo">
                 <label for="nombre">Nombre</label>
@@ -13,6 +15,7 @@
                 name="nombre"
                 id="nombre"
                 placeholder="Tu nombre"
+                value="<?php echo $usuario->nombre ?? ''; ?>"
                 >
             </div> <!-- Campo -->
 
@@ -23,6 +26,7 @@
                 name="email"
                 id="email"
                 placeholder="Tu Email"
+                value="<?php echo $usuario->email ?? ''; ?>"
                 >
             </div> <!-- Campo -->
             
@@ -37,11 +41,11 @@
             </div> <!-- Campo -->
 
             <div class="campo">
-                <label for="password-check">Confirma contraseña</label>
+                <label for="passwordCheck">Confirma contraseña</label>
                 <input
                 type="password"
-                name="password-check"
-                id="password-check"
+                name="passwordCheck"
+                id="passwordCheck"
                 placeholder="Confirma tu Contraseña"
                 >
             </div> <!-- Campo -->
