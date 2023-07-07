@@ -36,6 +36,14 @@ class Usuario extends ActiveRecord {
         return $this->getAlertas();
     }
 
+    public function validarEmail() {
+        if( !$this->email || !filter_var($this->email, FILTER_VALIDATE_EMAIL) ) {
+            self::$alertas["error"][] = "Ingresa un email valido";
+        }
+
+        return self::$alertas;
+    }
+
     function hashPassword() {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
     }

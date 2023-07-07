@@ -45,7 +45,11 @@ class LoginController {
                     if( $res ) {
                         $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
                         $mail->enviarConfirmación();
-                        header('Location: /cuenta/mensaje');
+
+                        $router->render("auth/mensaje", [
+                            "titulo" => "Cuenta creada",
+                            "mensaje" => "La cuenta ha sido creada correctamente"
+                        ]);
                     }
                 }
             }
@@ -60,11 +64,12 @@ class LoginController {
         ]);
     }
 
-    public static function mensaje(Router $router) {
-        $router->render("/auth/mensaje", [
-            "titulo" => "Cuenta Creada"
-        ]);
-    }
+    // public static function cuentaCreada(Router $router) {
+    //     $router->render("/auth/mensaje", [
+    //         "titulo" => "Cuenta Creada",
+    //         "mensaje" => "Tu cuenta fue creada correctamente"
+    //     ]);
+    // }
     
     public static function confirmar(Router $router) {
         $token = s($_GET["token"]);
@@ -84,24 +89,46 @@ class LoginController {
         } else Usuario::setAlerta("error", "Token Invalido");
 
         
-        $alertas = Usuario::getAlertas();
         $router->render("auth/confirmar-cuenta", [
             "titulo" => "Cuenta Confirmada",
-            "alertas" => $alertas
+            "alertas" => Usuario::getAlertas()
         ]);
     }
 
     // Contraseñas
     public static function olvide(Router $router) {
-
         if($_SERVER["REQUEST_METHOD"] === "POST") {
-            
+            $usuario = new Usuario($_POST);
+            $alertas = $usuario->validarEmail();
+
+            if( empty($alertas)) {
+                $usuario = Usuario::where("email", $usuario->email);
+
+                if( !$usuario ){
+                    Usuario::setAlerta("error", "Este correo no esta asociado a ninguna cuenta");
+                } else if ( !$usuario->confirmado ){
+                    Usuario::setAlerta("error", "Aun no has confirmado tu cuenta");
+                    
+                } else if ( $usuario->token ) {
+                    Usuario::setAlerta("info", "Ya hemos enviado un correo anteriormente, revisa tu bandeja");
+                    
+                } else {
+                    $usuario->crearToken();
+                    $usuario->guardar();
+                    $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
+                    $mail->enviarRecuperacionPass();
+
+                    $router->render("auth/mensaje", [
+                        "titulo" => "Correo enviado",
+                        "mensaje" => "Hemos enviado un correo con las instrucciones para reestablecer tu contraseña"
+                    ]);
+                }
+            }
         }
         
-        $alertas = Usuario::getAlertas();
         $router->render("/auth/olvide-password", [
             "titulo" => "Recuperar Contraseña",
-            "alertas" => $alertas
+            "alertas" => Usuario::getAlertas()
         ]);
     }
 
@@ -114,7 +141,8 @@ class LoginController {
         }
 
         $router->render("auth/reestablecer", [
-            "titulo" => "Reestablecer contraseña"
+            "titulo" => "Reestablecer contraseña",
+            "alertas" => Usuario::getAlertas()
         ]);
     }
 }

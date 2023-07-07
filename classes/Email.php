@@ -46,4 +46,19 @@ class Email {
         $mail->Body =  $contenido;
         $mail->send();
     }
+
+    public function enviarRecuperacionPass() {
+        $mail = $this->getConfig("Reesablece tu contraseña | Up task");
+
+        $contenido = "<html>";
+        $contenido .= "<p><strong> Hola " . $this->nombre . "</strong></p>";
+        $contenido .= "<p>Para reestablecer tu contraseña entra en el sig. enlace</p>";
+        $contenido .= "<p>Presiona aqui: <a href='" . $_ENV["APP_URL"] . "/cuenta/password/reestablecer?token={$this->token}'>Recuperar Contraseña</a></p>";
+        $contenido .= "<p>Si tu no solicitaste esto, puedes ignorar este email</p>";
+        $contenido .= "</html>";
+
+        $mail->isHTML();
+        $mail->Body =  $contenido;
+        $mail->send();
+    }
 }
