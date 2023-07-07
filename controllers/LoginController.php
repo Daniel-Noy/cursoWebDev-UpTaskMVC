@@ -67,21 +67,41 @@ class LoginController {
     }
     
     public static function confirmar(Router $router) {
+        $token = s($_GET["token"]);
+
+        if( !$token ) header("Location: /");
+
+        $usuario = Usuario::where("token", $token);
+        
+        if( $usuario ){
+            $usuario->token = '';
+            $usuario->confirmado = 1;
+            $res = $usuario->guardar();
+            
+            if($res) {
+                Usuario::setAlerta("correcto", "Cuenta confirmada");
+            }
+        } else Usuario::setAlerta("error", "Token Invalido");
+
+        
+        $alertas = Usuario::getAlertas();
         $router->render("auth/confirmar-cuenta", [
-            "titulo" => "Cuenta Confirmada"
+            "titulo" => "Cuenta Confirmada",
+            "alertas" => $alertas
         ]);
     }
 
     // Contraseñas
     public static function olvide(Router $router) {
 
-
         if($_SERVER["REQUEST_METHOD"] === "POST") {
-
+            
         }
-
+        
+        $alertas = Usuario::getAlertas();
         $router->render("/auth/olvide-password", [
-            "titulo" => "Recuperar Contraseña"
+            "titulo" => "Recuperar Contraseña",
+            "alertas" => $alertas
         ]);
     }
 
