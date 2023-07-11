@@ -5,7 +5,7 @@
   "main": "public/index.php",
   "scripts": {
     "dev": "gulp",
-    "composer": "composer install"
+    "start-server": "cd public && php -S localhost:3000"
   },
   "author": "Daniel Noyola",
   "license": "ISC",
