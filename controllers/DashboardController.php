@@ -9,10 +9,13 @@ class DashboardController {
     {
         session_start();
         isAuth();
+        $id = $_SESSION["id"];
 
+        $proyectos = Proyecto::belongsTo("usuarioId", $id);
 
         $router->render("/dashboard/index", [
-            "titulo" => "Proyectos"
+            "titulo" => "Proyectos",
+            "proyectos" => $proyectos
         ]);
     }
 
@@ -54,7 +57,7 @@ class DashboardController {
                 $res = $proyecto->guardar();
 
                 if ($res) {
-                    header("Location: /proyecto?id=" . $proyecto->url);
+                    header("Location: /dashboard/proyecto?id=" . $proyecto->url);
                 } else {
                     Proyecto::setAlerta("error", "Hubo un error al crear el proyecto");
                 }
