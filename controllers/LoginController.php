@@ -7,6 +7,9 @@ use MVC\Router;
 
 class LoginController {
     public static function login(Router $router) {
+        session_start();
+        if( $_SESSION["login"] ) header("Location: /dashboard");
+
         if($_SERVER["REQUEST_METHOD"] === "POST") {
             $auth = new Usuario($_POST);
             $alertas = $auth->validarLogin();
@@ -20,12 +23,13 @@ class LoginController {
                     $pass = $usuario->comprobarLogin($auth->password);
 
                     if( $pass ){
+                        session_start();
                         $_SESSION["id"] = $usuario->id;
                         $_SESSION["nombre"] = $usuario->nombre;
                         $_SESSION["email"] = $usuario->email;
                         $_SESSION["login"] = true;
 
-                        header("Location: /proyectos");
+                        header("Location: /dashboard");
                     }
                 }
             }
@@ -40,6 +44,7 @@ class LoginController {
 
 
     public static function logout(Router $router) {
+        session_start();
         $_SESSION = [];
         header("Location: /");
     }
