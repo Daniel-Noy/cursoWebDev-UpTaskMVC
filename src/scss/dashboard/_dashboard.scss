@@ -32,7 +32,6 @@
         input[type="submit"] {
             @include m.boton(v.$indigo, v.$blanco);
             padding: 1rem;
-            border-radius: .5rem;
         }
 
 

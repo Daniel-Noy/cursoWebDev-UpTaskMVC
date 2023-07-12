@@ -53,6 +53,7 @@
         font-size: 7rem;
 
         background: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 30%) 100%);
+        -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
     }
