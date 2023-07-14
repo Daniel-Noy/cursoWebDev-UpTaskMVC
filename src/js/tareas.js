@@ -1,10 +1,12 @@
 (function() {
     const dashboardContainer = document.querySelector('.dashboard');
+    let modal;
+    let formulario;
     const nuevaTareaBtn = document.querySelector('#agregar-tarea');
     nuevaTareaBtn.addEventListener('click', mostrarFormulario);
 
     function mostrarFormulario() {
-        const modal = document.createElement('DIV');
+        modal = document.createElement('DIV');
         modal.classList.add('modal');
         modal.innerHTML = `
             <form action="" class="formulario cerrado nueva-tarea">
@@ -26,24 +28,26 @@
         `;
         dashboardContainer.appendChild(modal);
         
-        const formulario = document.querySelector('.formulario');
+        formulario = document.querySelector('.formulario');
         setTimeout(() => {
             formulario.classList.remove('cerrado');
             formulario.classList.add('abierto');
         }, 10);
 
-        modal.addEventListener('click', (e) => {
-            const elemento = e.target;
-            if( elemento.classList.contains('cerrar-modal') || elemento.classList.contains('modal')) {
-                formulario.classList.add('cerrado');
-                formulario.classList.remove('abierto');
-                    
-                setTimeout(()=> {
-                    modal.remove();
-                }, 450);
-                }
-        });
+        modal.addEventListener('click', cerrarModal);
         formulario.addEventListener('submit', validarFormulario);
+    }
+
+    function cerrarModal(e) {
+        const elemento = e.target;
+        if( elemento.classList.contains('cerrar-modal') || elemento.classList.contains('modal')) {
+            formulario.classList.add('cerrado');
+            formulario.classList.remove('abierto');
+                
+            setTimeout(()=> {
+                modal.remove();
+            }, 450);
+            }
     }
 
     function validarFormulario(e) {
@@ -53,12 +57,39 @@
         mostrarAlerta('error', 'El nombre de la tarea debe ser mayor a 5 caracteres', document.querySelector('.formulario legend'));
         return;
     }
-
     agregarTarea(tarea);
     }
 
-    function agregarTarea() {
-        
+    async function agregarTarea(tarea) {
+        const url = `${location.origin}/api/tareas/crear`;
+        const datosUrl = obtenerDatosUrl();
+        const datos = new FormData();
+        datos.append('nombre', tarea);
+        datos.append('proyectoId', datosUrl.id);
+
+        const btnSubmit = formulario.querySelector('.submit-nueva-tarea');
+        btnSubmit.disabled = true;
+
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                body:datos
+            });
+
+            const respuesta = await res.json();
+            mostrarAlerta( respuesta.tipo, respuesta.mensaje, document.querySelector('.formulario legend') );
+
+            if( respuesta.tipo = 'correcto' ) {
+                formulario.reset();
+                btnSubmit.disabled = false;
+            } else {
+                btnSubmit.disabled = false;
+            }
+
+        } catch (err) {
+            mostrarAlerta('error', 'Hubo un error en el servidor',document.querySelector('.formulario legend'))
+            btnSubmit.disabled = false;
+        }
     }
 
     function mostrarAlerta(tipo, mensaje, referencia) {
@@ -74,5 +105,11 @@
         setTimeout(()=> {
             alerta.remove()
         }, 3000);
+    }
+
+    function obtenerDatosUrl() {
+        const urlParams = new URLSearchParams(location.search);
+        const objectParams = Object.fromEntries(urlParams.entries());
+        return objectParams;
     }
 })();

@@ -4,6 +4,7 @@ require_once __DIR__ . '/../includes/app.php';
 
 use Controllers\DashboardController;
 use Controllers\LoginController;
+use Controllers\TareaController;
 use MVC\Router;
 $router = new Router();
 
@@ -37,9 +38,13 @@ $router->post("/dashboard/proyecto", [DashboardController::class, "proyecto"]);
 $router->get("/dashboard/proyecto/crear", [DashboardController::class, "crearProyecto"]);
 $router->post("/dashboard/proyecto/crear", [DashboardController::class, "crearProyecto"]);
 
-
-
 $router->get("/dashboard/perfil", [DashboardController::class, "perfil"]);
+
+// Tareas
+$router->get('/api/tareas', [TareaController::class, "index"]);
+$router->post('/api/tareas/crear', [TareaController::class, "crearTarea"]);
+$router->post('/api/tareas/actualizar', [TareaController::class, "actualizarTarea"]);
+$router->post('/api/tareas/eliminar', [TareaController::class, "eliminarTarea"]);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

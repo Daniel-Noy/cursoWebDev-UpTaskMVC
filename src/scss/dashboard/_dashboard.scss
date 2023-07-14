@@ -32,8 +32,11 @@
         input[type="submit"] {
             @include m.boton(v.$indigo, v.$blanco);
             padding: 1rem;
+
+            &:disabled {
+                background-color: lighten(v.$indigo, 15%);
+                cursor: default;
+            }
         }
-
-
     }
 }

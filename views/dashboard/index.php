@@ -11,6 +11,10 @@
                 </a>
             </li>
         <?php } ?>
+
+        <li class="proyecto crear">
+            <a href="/dashboard/proyecto/crear">&plus; Crear Proyecto</a>
+        </li>
     </ul>
 <?php } ?>
 
