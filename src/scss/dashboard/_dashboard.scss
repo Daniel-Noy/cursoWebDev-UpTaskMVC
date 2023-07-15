@@ -2,7 +2,7 @@
 @use 'base/mixins' as m;
 
 .dashboard {
-    min-height: 100vh;
+    height: 100vh;
     background-color: v.$grisClaro;
 
 
@@ -13,6 +13,7 @@
     
     &__principal {
         flex-grow: 1;
+        overflow-y: auto;
     }
 
     .contenido {

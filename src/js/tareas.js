@@ -1,9 +1,12 @@
 (function() {
-    const dashboardContainer = document.querySelector('.dashboard');
+    let tareas = [];
     let modal;
     let formulario;
+    const dashboardContainer = document.querySelector('.dashboard');
     const nuevaTareaBtn = document.querySelector('#agregar-tarea');
     nuevaTareaBtn.addEventListener('click', mostrarFormulario);
+
+    obtenerTareas();
 
     function mostrarFormulario() {
         modal = document.createElement('DIV');
@@ -82,6 +85,16 @@
             if( respuesta.tipo = 'correcto' ) {
                 formulario.reset();
                 btnSubmit.disabled = false;
+
+                const tareaObj = {
+                    id: respuesta.id,
+                    nombre: tarea,
+                    estado: "0",
+                    proyectoId: respuesta.proyectoId
+                }
+
+                tareas = [...tareas, tareaObj];
+                mostrarTareas();
             } else {
                 btnSubmit.disabled = false;
             }
@@ -90,6 +103,121 @@
             mostrarAlerta('error', 'Hubo un error en el servidor',document.querySelector('.formulario legend'))
             btnSubmit.disabled = false;
         }
+    }
+
+    function cambiarEstadoActual(tarea) {
+        const nuevoEstado =  tarea.estado === "1" ? "0" : "1";
+        tarea.estado = nuevoEstado;
+        $res = actualizarTarea(tarea);
+        
+    }
+
+    async function actualizarTarea(tarea) {
+        const {estado, id, nombre} = tarea;
+        const datos = new FormData();
+        datos.append('id', id);
+        datos.append('nombre', nombre);
+        datos.append('estado', estado);
+        datos.append('proyectoId', obtenerDatosUrl().id);
+
+        try {
+            const url = `${location.origin}/api/tareas/actualizar`;
+
+            const res = await fetch(url, {
+                method: 'POST',
+                body: datos
+            });
+
+            const resultado = await res.json();
+
+            if( resultado.tipo === "correcto") {
+                tareas = tareas.map( tarea => {
+                    if ( tarea.id === id ) {
+                        tarea.estado = estado
+                    }
+                    return tarea;
+                })
+
+                mostrarTareas();
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function obtenerTareas() {
+        const datosUrl = obtenerDatosUrl();
+        const url = `${location.origin}/api/tareas?id=${datosUrl.id}`;
+
+        try {
+            const res = await fetch(url);
+            const resultado = await res.json();
+            tareas = resultado.tareas;
+
+            mostrarTareas();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    function mostrarTareas() {
+        const listaAnterior = document.querySelector('#listado-tareas');
+        if( listaAnterior ) listaAnterior.remove();
+
+        const estados = {
+            0: 'Pendiente',
+            1: 'Completado'
+        };
+        const contenedorPagina = document.querySelector('.contenedor-sm');
+        const listaTareas = document.createElement('UL');
+        listaTareas.classList.add('listado-tareas');
+        listaTareas.id = 'listado-tareas';
+
+        
+        if( tareas.length === 0 ) {
+            const textoNoTareas = document.createElement('LI');
+            textoNoTareas.className = 'no-tareas';
+            textoNoTareas.textContent = 'No Hay tareas';
+
+            listaTareas.appendChild(textoNoTareas);
+            contenedorPagina.appendChild(listaTareas);
+            return;
+        }
+
+        tareas.forEach( tarea => {
+            const {id, nombre, estado} = tarea;
+            const contenedorTarea = document.createElement('LI');
+            contenedorTarea.classList.add('tarea');
+            contenedorTarea.dataset.tareaId = id;
+
+            const nombreTarea = document.createElement('P');
+            nombreTarea.textContent = nombre;
+
+            const opcionesDiv = document.createElement('DIV');
+            opcionesDiv.classList.add('opciones');
+
+            const btnEstadoTarea = document.createElement('BUTTON');
+            btnEstadoTarea.classList.add('estado-tarea');
+            btnEstadoTarea.classList.add(estados[estado].toLowerCase());
+            btnEstadoTarea.dataset.estadoTarea = estado;
+            btnEstadoTarea.textContent = estados[estado];
+            btnEstadoTarea.ondblclick = ()=> {
+                cambiarEstadoActual({...tarea})
+            }
+
+            const btnEliminarTarea = document.createElement('BUTTON');
+            btnEliminarTarea.classList.add('eliminar-tarea');
+            btnEliminarTarea.dataset.idTarea = id;
+            btnEliminarTarea.textContent = 'Eliminar Tarea';
+
+            opcionesDiv.append( btnEstadoTarea, btnEliminarTarea );
+            contenedorTarea.append( nombreTarea, opcionesDiv );
+
+            listaTareas.appendChild(contenedorTarea);
+        })
+
+        contenedorPagina.appendChild(listaTareas);
     }
 
     function mostrarAlerta(tipo, mensaje, referencia) {
