@@ -146,6 +146,28 @@
         }
     }
 
+    async function eliminarTarea(tarea) {
+        const {id, proyectoId} = tarea
+        const url = `${location.origin}/api/tareas/eliminar`;
+
+        datos = new FormData();
+        datos.append('id', id);
+        datos.append('proyectoId', proyectoId);
+
+        const res = await fetch(url, {
+            method: 'POST',
+            body: datos
+        })
+
+        const resultado = await res.json();
+        
+        if( resultado.tipo === "correcto") {
+            tareas = tareas.filter( tarea => tarea.id !== id);
+
+            mostrarTareas();
+        }
+    }
+
     async function obtenerTareas() {
         const datosUrl = obtenerDatosUrl();
         const url = `${location.origin}/api/tareas?id=${datosUrl.id}`;
@@ -210,6 +232,9 @@
             btnEliminarTarea.classList.add('eliminar-tarea');
             btnEliminarTarea.dataset.idTarea = id;
             btnEliminarTarea.textContent = 'Eliminar Tarea';
+            btnEliminarTarea.ondblclick = ()=> {
+                eliminarTarea({...tarea});
+            }
 
             opcionesDiv.append( btnEstadoTarea, btnEliminarTarea );
             contenedorTarea.append( nombreTarea, opcionesDiv );

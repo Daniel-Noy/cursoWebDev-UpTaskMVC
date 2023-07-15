@@ -86,7 +86,6 @@ class TareaController {
                     "tipo" => "correcto",
                     "mensaje" => "Estado de la tarea Actualizado",
                     "id" => $tarea->id,
-                    "proyectoId" => $tarea->proyectoId
                 ];
             }
 
@@ -96,7 +95,29 @@ class TareaController {
 
     public static function eliminarTarea() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            
+            session_start();
+            $proyecto = Proyecto::where('id', $_POST["proyectoId"]);
+
+            if( !$proyecto || $proyecto->usuarioId !== $_SESSION["id"]){
+                $res = [
+                    "tipo" => "error",
+                    "mensaje" => "Error al eliminar la tarea"
+                ];
+
+                return;
+            }
+
+            $tarea = Tarea::where('id', $_POST["id"]);
+            $res = $tarea->eliminar();
+
+            if ($res) {
+                $res = [
+                    "tipo" => "correcto",
+                    "id" => $tarea->id
+                ];
+            }
+
+            echo json_encode($res);
         }
     } 
 }
