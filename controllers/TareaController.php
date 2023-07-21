@@ -113,7 +113,6 @@ class TareaController {
             if ($res) {
                 $res = [
                     "tipo" => "correcto",
-                    "id" => $tarea->id
                 ];
             }
 
