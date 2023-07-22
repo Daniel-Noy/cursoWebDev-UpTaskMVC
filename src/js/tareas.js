@@ -1,7 +1,9 @@
 (function() {
     let tareas = [];
+    let tareasFiltradas = [];
     let modal;
     let formulario;
+    const filtros = document.querySelectorAll('.filtros-inputs input')
     const dashboardContainer = document.querySelector('.dashboard');
     const nuevaTareaBtn = document.querySelector('#agregar-tarea');
     nuevaTareaBtn.addEventListener('click', ()=> {
@@ -9,6 +11,22 @@
     });
 
     obtenerTareas();
+
+    filtros.forEach( filtro => {
+        filtro.addEventListener('input', ()=> {
+            filtrarTareas(filtro.value);
+        })
+    })
+
+    function filtrarTareas(valor) {
+        if( valor === '') {
+            mostrarTareas(tareas)
+            return
+        }
+
+        tareasFiltradas = tareas.filter( tarea => tarea.estado === valor);
+        mostrarTareas(tareasFiltradas);
+    }
 
     function mostrarFormulario(edicion = false, tarea) {
         modal = document.createElement('DIV');
@@ -114,7 +132,7 @@
                 }
 
                 tareas = [...tareas, tareaObj];
-                mostrarTareas();
+                mostrarTareas(tareas);
             } else {
                 btnSubmit.disabled = false;
             }
@@ -144,7 +162,6 @@
         const nuevoEstado =  tarea.estado === "1" ? "0" : "1";
         tarea.estado = nuevoEstado;
         $res = actualizarTarea(tarea);
-        
     }
 
     async function actualizarTarea(tarea) {
@@ -174,7 +191,7 @@
                     return tarea;
                 })
 
-                mostrarTareas();
+                mostrarTareas(tareas);
                 return true;
             }
 
@@ -203,7 +220,7 @@
             if( resultado.tipo === "correcto") {
                 tareas = tareas.filter( tarea => tarea.id !== id);
     
-                mostrarTareas();
+                mostrarTareas(tareas);
             }
         } catch (err) {
             console.log(err);
@@ -219,13 +236,13 @@
             const resultado = await res.json();
             tareas = resultado.tareas;
 
-            mostrarTareas();
+            mostrarTareas(tareas);
         } catch (err) {
             console.log(err);
         }
     }
 
-    function mostrarTareas() {
+    function mostrarTareas(tareas) {
         const listaAnterior = document.querySelector('#listado-tareas');
         if( listaAnterior ) listaAnterior.remove();
 

@@ -1,0 +1,63 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.filtros {
+    margin-top: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+
+    h2 {
+        font-size: 2.4rem;
+        color: v.$indigo;
+
+        @include m.tablet {
+            margin: 0;    
+        }
+    }
+    .filtros-inputs {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+        
+        @include m.tablet {
+            flex-direction: row;
+            align-items: center;
+            gap: 2.5rem;
+            
+        }
+    }
+
+    .campo {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: space-between;
+
+        // &::before {
+        //     content: "";
+        //     position: absolute;
+        //     left: -1px;
+        //     bottom: 0;
+
+        //     width: 0;
+        //     height: 1px;
+        //     background-color: v.$gris;
+
+        //     transition: all 150ms ease-in-out;
+        // }
+        // &:hover {
+        //     &::before {
+        //         width: 100%;
+            // }
+        // }
+    }
+
+    input[type="radio"] {
+        accent-color: v.$indigo;
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+
+}

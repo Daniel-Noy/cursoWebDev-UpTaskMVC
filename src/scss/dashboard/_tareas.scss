@@ -34,9 +34,11 @@
     }
 
     .opciones {
+        display: flex;
 
         button {
             margin: 0 .5rem;
+            width: min-content;
             padding: .5rem 1rem;
             border: none;
 
