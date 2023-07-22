@@ -44,5 +44,5 @@
 <?php include_once __DIR__ . "/footer-dasboard.php" ?>
 
 <?php 
-    $script = "<script src='/build/js/tareas.js'></script>"
+    $script .= "<script src='/build/js/tareas.js'></script>"
 ?>

@@ -2,14 +2,18 @@
 @use 'base/mixins' as m;
 
 .barra {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
 
     background-color: v.$blanco;
-    box-shadow: 1px 12px 9px -13px rgba(0 0 0 / .4) ;
+    box-shadow: 1px 12px 9px -13px rgba(0 0 0 / .4);
+
+    @include m.tablet {
+        display: flex;
+    }
 
     & > * {
         margin: .5rem 1rem;
@@ -25,5 +29,36 @@
         font-size: 1.4rem;
         padding: 1rem;
         border-radius: .5rem;
+    }
+}
+
+.barra-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    background-color: v.$indigo;
+
+    @include m.tablet {
+        display: none;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 5rem;
+        color: v.$blanco;
+    }
+
+    img {
+        cursor: pointer;
+        padding: 1rem;
+        border-radius: .5rem;
+
+        &:hover {
+            background-color: darken(v.$indigo, 10%);
+        }
+        &:active {
+            background-color: darken(v.$indigo, 15%);
+        }
     }
 }
