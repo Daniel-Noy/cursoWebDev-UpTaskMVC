@@ -1,0 +1,8 @@
+@use "base/variables" as v;
+@use "base/mixins" as m;
+
+.login {
+    margin-top: 5rem;
+
+    @include m.degradadoTexto(v.$cyan, v.$blanco);
+}

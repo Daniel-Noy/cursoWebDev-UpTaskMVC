@@ -1,0 +1,64 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.sidebar {
+    display: none;
+    padding: 2rem;
+    color: v.$blanco;
+    background-color: v.$indigo;
+
+    @include m.tablet {
+        display: block;
+    }
+
+    &__nav {
+        margin-top: 5rem;
+        
+        a {
+            display: block;
+            margin-bottom: 1.5rem;
+            padding: .8rem;
+
+            text-align: left;
+            color: v.$blanco;
+            border-radius: .5rem;
+            transition-property: background-color;
+            transition-duration: 250ms;
+
+            &:hover,
+            &.activo {
+                background-color: darken(v.$indigo, 20%);
+            }
+        }
+
+        .cerrar-sesion {
+            display: none;
+        }
+    }
+
+    &.mostrar-mobile {
+        display: block;
+        position: absolute;
+        z-index: 1;
+        top: 8.75rem;
+        left: 0;
+        right: 0;
+        h2 {
+            display: none;
+        }
+        .sidebar__nav {
+            margin: 0;
+
+            a {
+                padding: 2rem 1rem;
+            }
+        }
+        .cerrar-sesion {
+            display: block;
+        }
+        @include m.tablet {
+            display: none;
+        }
+    }
+
+}

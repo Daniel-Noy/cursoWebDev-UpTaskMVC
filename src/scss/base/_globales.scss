@@ -24,6 +24,13 @@ body {
 }
 a {
     text-decoration: none;
+    margin-bottom: 2rem;
+    color: v.$negro;
+    text-align: center;
+    
+    &:hover {
+        color: v.$gris;
+    }
 }
 img {
     max-width: 100%;

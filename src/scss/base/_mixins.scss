@@ -45,3 +45,33 @@
     gap: $espaciado;
     grid-template-columns: repeat($columnas, 1fr);
 }
+
+
+@mixin degradadoTexto($bgcolor, $txtcolor) {
+    .uptask-logo {
+        text-align: center;
+        font-size: 7rem;
+
+        background: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 30%) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    input[type="submit"] {
+        @include boton($bgcolor, $txtcolor);
+    }
+
+    a{
+        color: $bgcolor;
+        &:hover {
+            color: darken($bgcolor, 10%);
+        }
+    }
+
+    @include tablet {
+        .uptask-logo {
+            font-size: 10rem;
+        }
+    }
+}

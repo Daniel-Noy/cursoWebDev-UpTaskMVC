@@ -1,0 +1,81 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+@media (prefers-color-scheme: dark) {
+    $grisOscuro: #2c2c3b;
+
+    body {
+        background-color: $grisOscuro;
+    }
+
+    .tagline,
+    .formulario label,
+    .login .acciones a,
+    .crear-cuenta .acciones a,
+    .olvide-password .acciones a,
+    .listado-proyectos .proyecto.crear a,
+    .dashboard .contenido a,
+    .filtros-inputs label,
+    .tarea p {
+        color: v.$blanco;
+    }
+    .nombre-pagina,
+    .descripcion-pagina,
+
+    .dashboard .formulario .input:not([type="submit"]) {
+        color: darken(v.$grisClaro, 15%);
+    }
+    .dashboard .formulario .campo input {
+        background-color: lighten($grisOscuro, 15%);
+        color: v.$grisClaro;
+    }
+    .formulario .campo input{
+        color: $grisOscuro;
+    }
+
+    .alerta.error {
+        background-color: v.$grisClaro;
+    }
+
+    .barra,
+    .barra-mobile {
+        background-color: darken($grisOscuro, 6%);
+    }
+
+    .dashboard {
+        background-color: $grisOscuro;
+    }
+
+    .sidebar,
+    .listado-proyectos .proyecto a {
+        background-color: darken(v.$indigo, 15%);
+    }
+    
+    .listado-proyectos .proyecto.crear a {
+        border-color: darken(v.$indigo, 10%); 
+        &:hover{
+            border: 0;
+            background-color: darken(v.$indigo, 15%);
+        }
+    }
+
+    .listado-tareas{
+        .tarea {
+            border: none;
+            border-radius: 10px;
+            background-color: darken(v.$grisOscuro, 18%);
+            
+        } 
+        .no-tareas {
+            color: v.$blanco;
+        }
+    }
+
+    .formulario.nueva-tarea {
+        background-color: $grisOscuro;
+
+        legend {
+            color: v.$grisClaro;
+        }
+    }
+}

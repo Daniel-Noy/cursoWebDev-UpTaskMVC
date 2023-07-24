@@ -4,8 +4,7 @@
   "description": "",
   "main": "public/index.php",
   "scripts": {
-    "dev": "gulp",
-    "composer": "composer install"
+    "dev": "cd public && php -S localhost:3000"
   },
   "author": "Daniel Noyola",
   "license": "ISC",
