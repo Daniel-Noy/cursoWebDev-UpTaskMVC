@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use Model\Proyecto;
+use Model\Usuario;
 use MVC\Router;
 
 class DashboardController {
@@ -75,8 +76,65 @@ class DashboardController {
         session_start();
         isAuth();
 
+        $usuario = Usuario::find($_SESSION["id"]);
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $usuario->sincronizar($_POST);
+            $alertas = $usuario->validarPerfil();
+
+            if (empty($alertas)) {
+                $existeUsuario = Usuario::where("email", $usuario->email);
+                if ($existeUsuario && $existeUsuario->id !== $usuario->id) {
+                    Usuario::setAlerta("error", "Este correo ya esta registrado");
+                } else {
+                    $res = $usuario->guardar();
+                    if ($res) {
+                        $_SESSION["nombre"] = $usuario->nombre;
+                        $_SESSION["email"] = $usuario->email;
+                        Usuario::setAlerta("correcto", "Se han actualizado los datos correctamente");
+                    }
+                }
+
+            }
+        }
+
         $router->render("/dashboard/perfil", [
-            "titulo" => "Perfil"
+            "titulo" => "Perfil",
+            "alertas" => Usuario::getAlertas(),
+        ]);
+    }
+
+    public static function cambiarPassword(Router $router)
+    {
+        session_start();
+        isAuth();
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $usuario = Usuario::find($_SESSION["id"]);
+            $usuario->sincronizar($_POST);
+
+            $alertas = $usuario->validarNuevoPassword();
+            if (empty($alertas)) {
+                $pass = $usuario->comprobarPassword();
+
+                if ($pass) {
+                    $usuario->password = $usuario->nuevoPassword;
+                    $usuario->hashPassword();
+                    $res = $usuario->guardar();
+
+                    if ($res) {
+                        Usuario::setAlerta("correcto", "Contraseña cambiada correctamente");
+                    }
+                } else {
+                    Usuario::setAlerta("error", "La contraseña actual no coincide");
+                }
+            }
+
+        }
+
+        $router->render('dashboard/cambiar-password', [
+            "titulo" => "Cambiar contraseña",
+            "alertas" => Usuario::getAlertas()
         ]);
     }
 }

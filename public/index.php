@@ -38,7 +38,11 @@ $router->post("/dashboard/proyecto", [DashboardController::class, "proyecto"]);
 $router->get("/dashboard/proyecto/crear", [DashboardController::class, "crearProyecto"]);
 $router->post("/dashboard/proyecto/crear", [DashboardController::class, "crearProyecto"]);
 
-$router->get("/dashboard/perfil", [DashboardController::class, "perfil"]);
+$router->get("/perfil", [DashboardController::class, "perfil"]);
+$router->post("/perfil", [DashboardController::class, "perfil"]);
+
+$router->get("/perfil/password", [DashboardController::class, "cambiarPassword"]);
+$router->post("/perfil/password", [DashboardController::class, "cambiarPassword"]);
 
 // Tareas
 $router->get('/api/tareas', [TareaController::class, "index"]);

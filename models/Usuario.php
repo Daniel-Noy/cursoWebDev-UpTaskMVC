@@ -10,6 +10,8 @@ class Usuario extends ActiveRecord {
     public $email;
     public $password;
     public $passwordCheck;
+    public $nuevoPassword;
+    public $actualPassword;
     public $token;
     public $confirmado;
 
@@ -20,6 +22,8 @@ class Usuario extends ActiveRecord {
         $this->email = $args["email"] ?? '';
         $this->password = $args["password"] ?? '';
         $this->passwordCheck = $args["passwordCheck"] ?? '';
+        $this->nuevoPassword = $args["nuevoPassword"] ?? '';
+        $this->actualPassword = $args["actualPassword"] ?? '';
         $this->token = $args["token"] ?? '';
         $this->confirmado = $args["confirmado"] ?? 0;
     }
@@ -37,8 +41,17 @@ class Usuario extends ActiveRecord {
         $this->validarContraseña();
         if( $this->password !== $this->passwordCheck ) self::setAlerta("error", "Las contraseñas no coinciden");
 
-
         return self::getAlertas();
+    }
+
+    public function validarPerfil() {
+        $this->validarEmail();
+
+        if(!$this->nombre) {
+            self::$alertas["error"][] = "El Nombre es Obligatorio";
+        }
+
+        return self::$alertas;
     }
 
     public function validarEmail() {
@@ -60,19 +73,35 @@ class Usuario extends ActiveRecord {
         return self::getAlertas();
     }
 
-    public function comprobarLogin( string $password) {
+    public function validarNuevoPassword() {
+        if (!$this->actualPassword || !$this->nuevoPassword) {
+            self::$alertas["error"][] = "Debes llenar los espacios";
+        }
+
+        if (strlen($this->nuevoPassword) <= 6) {
+            self::$alertas["error"][] = "La contraseña debe ser de 6 caracteres como minimo";
+        }
+
+        return self::$alertas;
+    }
+
+    public function comprobarLogin(string $password) {
         $pass = password_verify($password, $this->password);
 
-        if( !$pass ) {
+        if (!$pass) {
             self::$alertas["error"][] = "Contraseña incorrecta";
             
         } else {
-            if( !$this->confirmado ) {
+            if(!$this->confirmado) {
                 self::$alertas["error"][] = "Aún no se ha confirmado tu cuenta";
 
             } else return true;
         }
+    }
 
+    public function comprobarPassword() {
+        $res = password_verify($this->actualPassword, $this->password);
+        return $res;
     }
 
     function hashPassword() {
