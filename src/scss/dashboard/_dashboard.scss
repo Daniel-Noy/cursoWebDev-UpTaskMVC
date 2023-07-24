@@ -19,6 +19,10 @@
     .contenido {
         padding: 2rem 1rem;
 
+        a {
+            color: v.$indigo;
+        }
+
         .nombre-pagina {
             font-size: 2.8rem;
             text-align: center;
