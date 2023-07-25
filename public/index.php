@@ -31,6 +31,7 @@ $router->post("/cuenta/password/reestablecer", [LoginController::class, "reestab
 
 // Dashboard
 $router->get("/dashboard", [DashboardController::class, "index"]);
+$router->post("/dashboard", [DashboardController::class, "index"]); // borrar al configurar git
 
 $router->get("/dashboard/proyecto", [DashboardController::class, "proyecto"]);
 $router->post("/dashboard/proyecto", [DashboardController::class, "proyecto"]);
