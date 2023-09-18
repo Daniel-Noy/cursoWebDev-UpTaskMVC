@@ -274,7 +274,8 @@
 
             const nombreTarea = document.createElement('P');
             nombreTarea.textContent = nombre;
-            nombreTarea.addEventListener('dblclick', ()=> {
+            nombreTarea.setAttribute('title', 'Cambiar nombre');
+            nombreTarea.addEventListener('click', ()=> {
                 mostrarFormulario(true, {...tarea});
             });
 
@@ -285,8 +286,9 @@
             btnEstadoTarea.classList.add('estado-tarea');
             btnEstadoTarea.classList.add(estados[estado].toLowerCase());
             btnEstadoTarea.dataset.estadoTarea = estado;
+            btnEstadoTarea.setAttribute('title', 'Actualizar estado de la tarea')
             btnEstadoTarea.textContent = estados[estado];
-            btnEstadoTarea.ondblclick = ()=> {
+            btnEstadoTarea.onclick = ()=> {
                 cambiarEstadoActual({...tarea})
             }
 
@@ -294,7 +296,7 @@
             btnEliminarTarea.classList.add('eliminar-tarea');
             btnEliminarTarea.dataset.idTarea = id;
             btnEliminarTarea.textContent = 'Eliminar Tarea';
-            btnEliminarTarea.ondblclick = ()=> {
+            btnEliminarTarea.onclick = ()=> {
                 eliminarTarea({...tarea});
             }
 

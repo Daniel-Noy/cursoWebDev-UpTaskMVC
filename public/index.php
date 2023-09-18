@@ -39,6 +39,8 @@ $router->post("/dashboard/proyecto", [DashboardController::class, "proyecto"]);
 $router->get("/dashboard/proyecto/crear", [DashboardController::class, "crearProyecto"]);
 $router->post("/dashboard/proyecto/crear", [DashboardController::class, "crearProyecto"]);
 
+$router->post("/dashboard/proyecto/eliminar", [DashboardController::class, "eliminarProyecto"]);
+
 $router->get("/perfil", [DashboardController::class, "perfil"]);
 $router->post("/perfil", [DashboardController::class, "perfil"]);
 

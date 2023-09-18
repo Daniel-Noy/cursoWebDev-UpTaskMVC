@@ -4,6 +4,7 @@
 .contenedor-nueva-tarea {
     display: flex;
     justify-content: center;
+    gap: 2rem ;
     
     .agregar-tarea {
         @include m.boton(v.$cyan, v.$blanco);
@@ -31,6 +32,7 @@
 
     p {
         font-size: 1.6rem;
+        cursor: pointer;
     }
 
     .opciones {

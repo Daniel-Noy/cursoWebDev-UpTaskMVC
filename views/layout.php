@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Open+Sans&display=swap" rel="stylesheet"> 
+    <link rel="shortcut icon" href="/build/img/icon.webp" type="image/webp">
     <link rel="preconnect" href="/build/css/app.css">
     <link rel="stylesheet" href="/build/css/app.css">
 </head>

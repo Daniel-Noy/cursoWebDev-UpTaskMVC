@@ -8,7 +8,7 @@ use MVC\Router;
 class LoginController {
     public static function login(Router $router) {
         session_start();
-        if( $_SESSION["login"] ) header("Location: /dashboard");
+        if( isset($_SESSION['login']) && $_SESSION["login"] ) header("Location: /dashboard");
 
         if($_SERVER["REQUEST_METHOD"] === "POST") {
             $auth = new Usuario($_POST);
@@ -23,7 +23,9 @@ class LoginController {
                     $pass = $usuario->comprobarLogin($auth->password);
 
                     if( $pass ){
-                        session_start();
+                        if(!isset($_SESSION)){
+                            session_start();
+                        }
                         $_SESSION["id"] = $usuario->id;
                         $_SESSION["nombre"] = $usuario->nombre;
                         $_SESSION["email"] = $usuario->email;
@@ -43,7 +45,7 @@ class LoginController {
     }
 
 
-    public static function logout(Router $router) {
+    public static function logout() {
         session_start();
         $_SESSION = [];
         header("Location: /");
@@ -66,13 +68,14 @@ class LoginController {
                     $alertas = $usuario->getAlertas();
                 } else {
                     $usuario->hashPassword();
-                    $usuario->crearToken();
+
+                    // $usuario->crearToken(); //? Confirmacion desactivada por demostracion
                     unset($usuario->passwordCheck);
                     $res = $usuario->guardar();
                     
                     if( $res ) {
-                        $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
-                        $mail->enviarConfirmación();
+                        // $mail = new Email($usuario->email, $usuario->nombre, $usuario->token); //? Confirmacion desactivada por demostracion
+                        // $mail->enviarConfirmación();
 
                         header("Location: /cuenta/mensaje?tipo=creada");
                     }

@@ -90,13 +90,15 @@ class Usuario extends ActiveRecord {
 
         if (!$pass) {
             self::$alertas["error"][] = "Contraseña incorrecta";
-            
-        } else {
-            if(!$this->confirmado) {
-                self::$alertas["error"][] = "Aún no se ha confirmado tu cuenta";
+            return false;
+        } 
+        // else { //? Confirmacion desactivada por demo
+        //     if(!$this->confirmado) {
+        //         self::$alertas["error"][] = "Aún no se ha confirmado tu cuenta";
 
-            } else return true;
-        }
+        //     } else return true;
+        // }
+        return true;
     }
 
     public function comprobarPassword() {

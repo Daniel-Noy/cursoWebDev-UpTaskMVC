@@ -35,10 +35,12 @@ class DashboardController {
             header("Location: /dashboard");
         }
 
+        $proyectoId = $proyecto->id;
         $titulo = $proyecto->proyecto;
 
         $router->render("/dashboard/proyecto", [
-            "titulo" => $titulo
+            "titulo" => $titulo,
+            'proyectoId' => $proyectoId
         ]);
     }
 
@@ -69,6 +71,37 @@ class DashboardController {
             "titulo" => "Crear Proyecto",
             "alertas" => Proyecto::getAlertas()
         ]);
+    }
+
+    public static function eliminarProyecto()
+    {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            session_start();
+            $proyecto = Proyecto::find($_POST['id']);
+            
+            if( !$proyecto || $proyecto->usuarioId !== $_SESSION["id"]){
+                echo json_encode([
+                    "tipo" => "error",
+                    "mensaje" => "Error al eliminar la tarea"
+                ]); 
+                return;
+            }
+
+            $res = $proyecto->eliminar();
+            if ($res) {
+                echo json_encode([
+                    'tipo'=> 'correcto',
+                    'resultado' => true
+                ]); 
+                return;
+            } else {
+                echo json_encode([
+                    'tipo' => 'error',
+                    'resultado' => false
+                ]); 
+                return;
+            }
+        }
     }
 
     public static function perfil(Router $router)
