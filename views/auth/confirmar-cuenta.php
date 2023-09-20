@@ -8,4 +8,4 @@
     <div class="acciones">
         <a href="/">Iniciar Sesión</a>
     </div>
-</div>
+</div> 
