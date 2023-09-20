@@ -3,6 +3,7 @@
 
     <div class="contenedor-sm">
         <p class="descripcion-pagina">Recupera tu Contraseña ingresando el Correo registrado</p>
+        <p class="descripcion-pagina">La recuperacion de contraseña esta desactivada por demostracion</p>
         <?php include_once __DIR__ . "/../templates/alertas.php" ?>
 
         <form class="formulario" method="POST">
@@ -14,10 +15,11 @@
                 name="email"
                 id="email"
                 placeholder="Tu Email"
+                disabled
                 >
             </div> <!-- Campo -->
 
-            <input class="boton" type="submit" value="Enviar Correo">
+            <input disabled class="boton" type="submit" value="Enviar Correo">
         </form>
 
         <div class="acciones">

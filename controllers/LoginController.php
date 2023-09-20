@@ -134,31 +134,31 @@ class LoginController {
 
     // Contraseñas
     public static function olvide(Router $router) {
-        if($_SERVER["REQUEST_METHOD"] === "POST") {
-            $usuario = new Usuario($_POST);
-            $alertas = $usuario->validarEmail();
+        // if($_SERVER["REQUEST_METHOD"] === "POST") { //? Desactivado por demostración
+        //     $usuario = new Usuario($_POST);
+        //     $alertas = $usuario->validarEmail();
 
-            if( empty($alertas)) {
-                $usuario = Usuario::where("email", $usuario->email);
+        //     if( empty($alertas)) {
+        //         $usuario = Usuario::where("email", $usuario->email);
 
-                if( !$usuario ){
-                    Usuario::setAlerta("error", "Este correo no esta asociado a ninguna cuenta");
-                } else if ( !$usuario->confirmado ){
-                    Usuario::setAlerta("error", "Aun no has confirmado tu cuenta");
+        //         if( !$usuario ){
+        //             Usuario::setAlerta("error", "Este correo no esta asociado a ninguna cuenta");
+        //         } else if ( !$usuario->confirmado ){
+        //             Usuario::setAlerta("error", "Aun no has confirmado tu cuenta");
                     
-                } else if ( $usuario->token ) {
-                    Usuario::setAlerta("info", "Ya hemos enviado un correo anteriormente, revisa tu bandeja");
+        //         } else if ( $usuario->token ) {
+        //             Usuario::setAlerta("info", "Ya hemos enviado un correo anteriormente, revisa tu bandeja");
                     
-                } else {
-                    $usuario->crearToken();
-                    $res = $usuario->guardar();
-                    $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
-                    $mail->enviarRecuperacionPass();
+        //         } else {
+        //             $usuario->crearToken();
+        //             $res = $usuario->guardar();
+        //             $mail = new Email($usuario->email, $usuario->nombre, $usuario->token);
+        //             $mail->enviarRecuperacionPass();
 
-                    if( $res ) header("Location: /cuenta/mensaje?tipo=correo");
-                }
-            }
-        }
+        //             if( $res ) header("Location: /cuenta/mensaje?tipo=correo");
+        //         }
+        //     }
+        // }
         
         $router->render("/auth/olvide-password", [
             "titulo" => "Recuperar Contraseña",

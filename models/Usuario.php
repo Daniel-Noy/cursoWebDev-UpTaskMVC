@@ -25,7 +25,7 @@ class Usuario extends ActiveRecord {
         $this->nuevoPassword = $args["nuevoPassword"] ?? '';
         $this->actualPassword = $args["actualPassword"] ?? '';
         $this->token = $args["token"] ?? '';
-        $this->confirmado = $args["confirmado"] ?? 0;
+        $this->confirmado = $args["confirmado"] ?? 1;
     }
 
     public function validarLogin() {
